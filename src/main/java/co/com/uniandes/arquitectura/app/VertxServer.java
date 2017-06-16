@@ -1,29 +1,25 @@
 package co.com.uniandes.arquitectura.app;
 
-import com.google.inject.Inject;
-
+import co.com.uniandes.arquitectura.paciente.controller.PacienteController;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.rxjava.core.AbstractVerticle;
 import io.vertx.rxjava.core.http.HttpServer;
 import io.vertx.rxjava.ext.web.Router;
 import io.vertx.rxjava.ext.web.RoutingContext;
+import io.vertx.rxjava.ext.web.handler.BodyHandler;
 
 public class VertxServer extends AbstractVerticle {
-//
-//	@Inject
-//	private Router router;
+
+	private PacienteController pacienteController = new PacienteController();
 
 	@Override
 	public void start() {	
 		
-		Router router = Router.router(vertx);
-        router.route(HttpMethod.GET, "/status").handler(this::status);
-        
-        Router servicesRouter = Router.router(vertx);
+		Router servicesRouter = Router.router(vertx);
         setRoutes(servicesRouter);
         
 		HttpServer server = vertx.createHttpServer();
-        server.requestStream().toObservable().subscribe(router::accept);
+        server.requestStream().toObservable().subscribe(servicesRouter::accept);
         server.listen(8082, "0.0.0.0", bindingResult -> {
             if (bindingResult.succeeded()) {
             	System.out.println("Success");
@@ -31,17 +27,14 @@ public class VertxServer extends AbstractVerticle {
         });
 	}
 	
-    private void setRoutes(Router router) {
+	private void setRoutes(Router router) {
+		router.route().handler(BodyHandler.create());
+		router.route(HttpMethod.POST, "/crearEpisodio").handler(pacienteController::crearEpisodio);
+		router.route(HttpMethod.GET, "/status").handler(this::status);
 
-//      router.route(HttpMethod.POST, "/user").handler(userCtrl::user);
-  	router.route(HttpMethod.POST, "/temporal").handler(this::temporal);
-
-  }
+	}
 	private void status(RoutingContext ctx) {
 		ctx.response().setStatusCode(200).end();
 	}
 
-	private void temporal(RoutingContext ctx) {
-		ctx.response().setStatusCode(201).end();
-	}
 }
