@@ -57,12 +57,22 @@ public final class  OracleJDBCConnection {
         
         int result = 0;
 		try {
+			if(statement != null && !statement.isClosed())statement.close();
 			statement = db.conn.createStatement();
 			result = statement.executeUpdate(insertQuery);
+			statement.close();
 			return result;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			try {
+				statement.close();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}finally {
+			
 		}
         return result;
  
