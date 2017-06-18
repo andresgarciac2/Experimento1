@@ -1,17 +1,7 @@
 package co.com.uniandes.arquitectura.app;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
 import co.com.uniandes.arquitectura.paciente.controller.PacienteController;
-import io.vertx.core.Context;
-import io.vertx.core.Future;
-import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpMethod;
-import io.vertx.core.http.HttpServerOptions;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
 import io.vertx.rxjava.core.AbstractVerticle;
 import io.vertx.rxjava.core.http.HttpServer;
 import io.vertx.rxjava.ext.web.Router;

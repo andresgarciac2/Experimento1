@@ -3,7 +3,7 @@ package co.com.uniandes.arquitectura.paciente.controller;
 import co.com.uniandes.arquitectura.controller.Controller;
 import co.com.uniandes.arquitectura.jdbc.connection.JDBCConnection;
 import co.com.uniandes.arquitectura.persistence.EpisodioDTO;
-import co.com.uniandes.arquitectura.utilidades.Recomendacion;
+import co.com.uniandes.arquitectura.utilities.Recomendacion;
 import io.vertx.rxjava.ext.web.RoutingContext;
 
 public class PacienteController implements Controller {

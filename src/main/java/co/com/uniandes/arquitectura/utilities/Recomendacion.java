@@ -1,4 +1,4 @@
-package co.com.uniandes.arquitectura.utilidades;
+package co.com.uniandes.arquitectura.utilities;
 
 /*
  * Recomendaciones para los niveles de dolor
