@@ -6,17 +6,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
-public final class  OracleJDBCConnection {
+public final class  JDBCConnection {
 	
     public Connection conn;
-    private Statement statement;
-    public static OracleJDBCConnection db;
-    private OracleJDBCConnection() {
-        String url= "jdbc:oracle:thin:@localhost:1521:xe";
+    private static Statement statement;
+    public static JDBCConnection db;
+    
+    private JDBCConnection() {
+        
+    	String url= "jdbc:oracle:thin:@localhost:1521:xe";
         String driver = "oracle.jdbc.driver.OracleDriver";
-        String userName = "svebanistmo";
-        String password = "burra24";
+        String userName = "uniandes";
+        String password = "manage";
+            	   	
         try {
             Class.forName(driver).newInstance();
             this.conn = (Connection)DriverManager.getConnection(url,userName,password);
@@ -29,9 +31,9 @@ public final class  OracleJDBCConnection {
      *
      * @return MysqlConnect Database connection object
      */
-    public static synchronized OracleJDBCConnection getDbCon() {
+    public static synchronized JDBCConnection getDbCon() {
         if ( db == null ) {
-            db = new OracleJDBCConnection();
+            db = new JDBCConnection();
         }
         return db;
  
@@ -42,7 +44,7 @@ public final class  OracleJDBCConnection {
      * @return a ResultSet object containing the results or null if not available
      * @throws SQLException
      */
-    public ResultSet query(String query) throws SQLException{
+    public static synchronized  ResultSet query(String query) throws SQLException{
         statement = db.conn.createStatement();
         ResultSet res = statement.executeQuery(query);
         return res;
@@ -53,29 +55,22 @@ public final class  OracleJDBCConnection {
      * @return boolean
      * @throws SQLException
      */
-    public int insert(String insertQuery){
-        
+    public static synchronized int insert(String insertQuery){
         int result = 0;
 		try {
 			if(statement != null && !statement.isClosed())statement.close();
 			statement = db.conn.createStatement();
 			result = statement.executeUpdate(insertQuery);
 			statement.close();
-			return result;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			try {
 				statement.close();
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		}finally {
-			
 		}
         return result;
- 
     }
  
 }

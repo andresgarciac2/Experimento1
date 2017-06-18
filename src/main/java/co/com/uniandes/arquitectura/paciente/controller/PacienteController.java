@@ -1,24 +1,27 @@
 package co.com.uniandes.arquitectura.paciente.controller;
 
 import co.com.uniandes.arquitectura.controller.Controller;
-import co.com.uniandes.arquitectura.jdbc.connection.OracleJDBCConnection;
+import co.com.uniandes.arquitectura.jdbc.connection.JDBCConnection;
 import co.com.uniandes.arquitectura.persistence.EpisodioDTO;
+import co.com.uniandes.arquitectura.utilidades.Recomendacion;
 import io.vertx.rxjava.ext.web.RoutingContext;
 
 public class PacienteController implements Controller {
 
 	public void crearEpisodio(RoutingContext ctx) {
+		EpisodioDTO req = extractBodyAsJson(ctx, EpisodioDTO.class);
 		new Thread(() -> {
-			EpisodioDTO req = extractBodyAsJson(ctx, EpisodioDTO.class);
-			OracleJDBCConnection conn = OracleJDBCConnection.getDbCon();
-			String query = "INSERT INTO EPISODIOS_X_PACIENTE (ID,NOMBRE,NIVELDOLOR,CEDULA) VALUES ("
-					+ System.currentTimeMillis() + ",'"
-					+ req.getNombre() + "','" 
-					+ req.getNivelDolor() + "',"
+			JDBCConnection conn = JDBCConnection.getDbCon();
+			String query = "INSERT INTO EPISODIOS_X_PACIENTE (NOMBRE, NIVELDOLOR, CEDULA) VALUES ('"
+					+ req.getNombre() + "', '" 
+					+ req.getNivelDolor() + "', "
 					+ req.getCedula()+ ")";
-			int result = conn.insert(query);
+			conn.insert(query);
+			System.out.println("Ingreso en el 83");
 			System.out.println(query);
-			respondWithJson(ctx, 200, "Se inserto el registro " + result);
+			
 		}).start();
+		respondWithJson(ctx, 200, "Querido usuario según su nivel de dolor " + req.getNivelDolor()
+				+ " nuestra recomendación es que deberia " + Recomendacion.getRecomendacion(req.getNivelDolor()));
 	}
 }

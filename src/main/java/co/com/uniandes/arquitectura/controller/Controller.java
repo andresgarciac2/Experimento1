@@ -2,8 +2,6 @@ package co.com.uniandes.arquitectura.controller;
 
 import java.io.IOException;
 
-import javax.net.ssl.SSLEngineResult.Status;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -11,11 +9,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.vertx.core.json.DecodeException;
 import io.vertx.rxjava.ext.web.RoutingContext;
+
 /**
  * Implementa acciones comunes en los controladores
  */
 public interface Controller {
-
 	
     public static final ObjectMapper mapper = new ObjectMapper();
 	
@@ -49,9 +47,7 @@ public interface Controller {
      * @param ctx Contexto del request
      */
     default void respondNoContent(RoutingContext ctx) {
-        ctx.response()
-                .setStatusCode(403)
-                .end();
+        ctx.response().setStatusCode(403).end();
     }
 
     /**
