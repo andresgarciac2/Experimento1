@@ -22,23 +22,8 @@ public class VertxServer extends AbstractVerticle {
 
 	private PacienteController pacienteController = new PacienteController();
 
-	private final static Logger log = LoggerFactory.getLogger(LoadBalancerVerticle.class);
-	private final static String DEFAULT_HOST = "localhost";
-	private final static Integer DEFAULT_PORT = 8080;
-
-	private HttpServer server;
-	private HttpServerOptions options;
-	private List<ProxyHandler> slaves;
-
-	
 	@Override
-	public void init(Vertx vertx, Context context) {
-		super.init(vertx, context);
-		slaves = new ArrayList<>();
-	}
-	
-	@Override
-	public void start(Future<Void> future) {	
+	public void start() {	
 		
 		Router servicesRouter = Router.router(vertx);
         setRoutes(servicesRouter);
@@ -50,9 +35,6 @@ public class VertxServer extends AbstractVerticle {
             	System.out.println("Success");
             }
         });
-       
-        
-        
 	}
 	
 	private void setRoutes(Router router) {
@@ -61,12 +43,8 @@ public class VertxServer extends AbstractVerticle {
 		router.route(HttpMethod.GET, "/status").handler(this::status);
 
 	}
+	
 	private void status(RoutingContext ctx) {
 		ctx.response().setStatusCode(200).end();
 	}
-
-
-	
-	
-	
 }
