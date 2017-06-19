@@ -20,7 +20,7 @@ public class VertxServer extends AbstractVerticle {
         
 		HttpServer server = vertx.createHttpServer();
         server.requestStream().toObservable().subscribe(servicesRouter::accept);
-        server.listen(8083, "0.0.0.0", bindingResult -> {
+        server.listen(8082, "0.0.0.0", bindingResult -> {
             if (bindingResult.succeeded()) {
             	System.out.println("Success");
             }

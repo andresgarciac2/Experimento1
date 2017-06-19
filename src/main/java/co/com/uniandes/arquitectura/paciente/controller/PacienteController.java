@@ -10,18 +10,15 @@ public class PacienteController implements Controller {
 
 	public void crearEpisodio(RoutingContext ctx) {
 		EpisodioDTO req = extractBodyAsJson(ctx, EpisodioDTO.class);
-		new Thread(() -> {
+		respondWithJson(ctx, 200, "Querido usuario según su nivel de dolor " + req.getNivelDolor()
+				+ " nuestra recomendación es que deberia " + Recomendacion.getRecomendacion(req.getNivelDolor()));
+		
 			JDBCConnection conn = JDBCConnection.getDbCon();
 			String query = "INSERT INTO EPISODIOS_X_PACIENTE (NOMBRE, NIVELDOLOR, CEDULA) VALUES ('"
 					+ req.getNombre() + "', '" 
 					+ req.getNivelDolor() + "', "
 					+ req.getCedula()+ ")";
 			conn.insert(query);
-			System.out.println("Ingreso en el 83");
-			System.out.println(query);
-			
-		}).start();
-		respondWithJson(ctx, 200, "Querido usuario según su nivel de dolor " + req.getNivelDolor()
-				+ " nuestra recomendación es que deberia " + Recomendacion.getRecomendacion(req.getNivelDolor()));
+			System.out.println("Ingreso en el 82");
 	}
 }
