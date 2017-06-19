@@ -53,7 +53,7 @@ public final class  OracleJDBCConnection {
      * @return boolean
      * @throws SQLException
      */
-    public int insert(String insertQuery){
+    public int  insert(String insertQuery){
         
         int result = 0;
 		try {
