@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.com.uniandes.arquitectura.persistence.DiagnosticoDTO;
 import co.com.uniandes.arquitectura.persistence.EpisodioDTO;
 
 public class DoctorRepository {
@@ -47,4 +48,34 @@ static OracleJDBCConnection conn = OracleJDBCConnection.getDbCon();
 	        return results;
 	}
 	
+	public static int crearDiagnostico(DiagnosticoDTO diagnostico){
+        int result = 0;
+        PreparedStatement preparedStatement = null;
+        String insert = "INSERT INTO DIAGNOSTICOS_X_PACIENTE (DESCRIPCION,DOCTOR_ID,PACIENTE_ID) VALUES (?,?,?)";
+		try {
+			preparedStatement = conn.conn.prepareStatement(insert);
+
+			preparedStatement.setString(1, diagnostico.getDescripcion());
+			preparedStatement.setInt(2, diagnostico.getIdDoctor());
+			preparedStatement.setInt(3, diagnostico.getIdPaciente());
+
+			// execute insert SQL stetement
+			result = preparedStatement.executeUpdate();
+			System.out.println("sentencia ejecutada");
+			preparedStatement.close();
+			return result;
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				preparedStatement.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+        return result;
+	}
 }

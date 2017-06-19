@@ -33,6 +33,8 @@ public class VertxServer extends AbstractVerticle {
 		router.route().handler(BodyHandler.create());
 		router.route(HttpMethod.POST, "/crearEpisodio").handler(pacienteController::crearEpisodio);
 		router.route(HttpMethod.POST, "/consultarEpisodiosXPaciente").handler(doctorController::consultarEpisodiosXPaciente);
+		router.route(HttpMethod.POST, "/crearDiagnosticoXPaciente").handler(doctorController::crearDiagnosticoXPaciente);
+		router.route(HttpMethod.POST, "/consultarDiagnostico").handler(pacienteController::consultarDiagnostico);
 		router.route(HttpMethod.GET, "/status").handler(this::status);
 
 	}
