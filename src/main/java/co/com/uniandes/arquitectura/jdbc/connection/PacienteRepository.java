@@ -49,6 +49,7 @@ public class PacienteRepository {
 		List<DiagnosticoDTO> results= new ArrayList<>(); 
 		ResultSet result = null;
         PreparedStatement preparedStatement = null;
+        System.out.println(preparedStatement);
         String select = "SELECT * FROM DIAGNOSTICOS_X_PACIENTE WHERE PACIENTE_ID = ?";
 		try {
 			preparedStatement = conn.conn.prepareStatement(select);
