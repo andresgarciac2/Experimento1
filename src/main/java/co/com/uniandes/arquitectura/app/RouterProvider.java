@@ -45,8 +45,6 @@ public class RouterProvider implements Provider<Router> {
 
    
     private void setRoutes(Router router) {
-
-//        router.route(HttpMethod.POST, "/user").handler(userCtrl::user);
     	router.route(HttpMethod.POST, "/temporal").handler(this::temporal);
 
     }

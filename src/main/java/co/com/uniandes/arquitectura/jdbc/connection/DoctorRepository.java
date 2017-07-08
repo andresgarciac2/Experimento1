@@ -11,7 +11,7 @@ import co.com.uniandes.arquitectura.persistence.EpisodioDTO;
 
 public class DoctorRepository {
 
-static OracleJDBCConnection conn = OracleJDBCConnection.getDbCon();
+static JDBCConnection conn = JDBCConnection.getDb();
     
 	public static List<EpisodioDTO> consultarEpisodiosXPaciente(int cedula){
 			List<EpisodioDTO> results= new ArrayList<>(); 
@@ -35,13 +35,11 @@ static OracleJDBCConnection conn = OracleJDBCConnection.getDbCon();
 				preparedStatement.close();
 				return results;
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}finally {
 				try {
 					preparedStatement.close();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -66,13 +64,11 @@ static OracleJDBCConnection conn = OracleJDBCConnection.getDbCon();
 			return result;
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
 			try {
 				preparedStatement.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

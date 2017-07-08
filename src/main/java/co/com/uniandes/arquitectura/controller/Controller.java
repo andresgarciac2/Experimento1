@@ -2,8 +2,6 @@ package co.com.uniandes.arquitectura.controller;
 
 import java.io.IOException;
 
-import javax.net.ssl.SSLEngineResult.Status;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -11,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.vertx.core.json.DecodeException;
 import io.vertx.rxjava.ext.web.RoutingContext;
+
 /**
  * Implementa acciones comunes en los controladores
  */
@@ -20,7 +19,7 @@ public interface Controller {
     public static final ObjectMapper mapper = new ObjectMapper();
 	
 	 /**
-     * Extrae el cuerpo de una petici贸n como un JSON
+     * Extrae el cuerpo de una petici髇 como un JSON
      *
      * @param ctx   Contexto del request
      * @param clazz Clase del objeto destino
@@ -44,7 +43,7 @@ public interface Controller {
     }
 
     /**
-     * Responde una petici贸n http sin contenido (statusCode 204)
+     * Responde una petici髇 http sin contenido (statusCode 204)
      *
      * @param ctx Contexto del request
      */
@@ -55,7 +54,7 @@ public interface Controller {
     }
 
     /**
-     * Responde una petici贸n http con un JSON (statusCode 200)
+     * Responde una petici髇 http con un JSON (statusCode 200)
      *
      * @param ctx  Contexto del request
      * @param body Objeto a convertir en JSON
@@ -65,10 +64,10 @@ public interface Controller {
     }
 
     /**
-     * Responde una petici贸n http con un JSON
+     * Responde una petici髇 http con un JSON
      *
      * @param ctx        Contexto del request
-     * @param statusCode Status code de la resuesta
+     * @param statusCode Status code de la respuesta
      * @param body       Objeto a convertir en JSON
      */
     default void respondWithJson(RoutingContext ctx, int statusCode, Object body) {

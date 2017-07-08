@@ -7,16 +7,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
-public final class  OracleJDBCConnection {
+public final class  JDBCConnection {
 	
     public Connection conn;
     private Statement statement;
-    public static OracleJDBCConnection db;
-    private OracleJDBCConnection() {
+    public static JDBCConnection db;
+    
+    private JDBCConnection() {
         String url= "jdbc:oracle:thin:@localhost:1521:xe";
         String driver = "oracle.jdbc.driver.OracleDriver";
-        String userName = "svebanistmo";
-        String password = "burra24";
+        String userName = "uniandes";
+        String password = "manage";
         try {
             Class.forName(driver).newInstance();
             this.conn = (Connection)DriverManager.getConnection(url,userName,password);
@@ -25,17 +26,18 @@ public final class  OracleJDBCConnection {
             sqle.printStackTrace();
         }
     }
+    
     /**
      *
-     * @return MysqlConnect Database connection object
+     * @return JDBCConnection Database connection object
      */
-    public static synchronized OracleJDBCConnection getDbCon() {
+    public static synchronized JDBCConnection getDb() {
         if ( db == null ) {
-            db = new OracleJDBCConnection();
+            db = new JDBCConnection();
         }
         return db;
- 
     }
+    
     /**
      *
      * @param query String The query to be executed
@@ -53,8 +55,7 @@ public final class  OracleJDBCConnection {
      * @return boolean
      * @throws SQLException
      */
-    public int  insert(String insertQuery){
-        
+    public synchronized int insert(String insertQuery){
         int result = 0;
 		try {
 			if(statement != null && !statement.isClosed())statement.close();
@@ -63,19 +64,14 @@ public final class  OracleJDBCConnection {
 			statement.close();
 			return result;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			try {
 				statement.close();
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		}finally {
-			
 		}
         return result;
- 
     }
  
 }
