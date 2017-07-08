@@ -12,22 +12,20 @@ public class PacienteRepository {
 
 	static JDBCConnection conn = JDBCConnection.getDb();
 
-	public static int crearEpisodio(int id, String nombre, String nivelDolor, int cedula) {
+	public static int crearEpisodio(String nombre, String nivelDolor, int cedula) {
 		int result = 0;
 		PreparedStatement preparedStatement = null;
-		String insert = "INSERT INTO EPISODIOS_X_PACIENTE (ID,NOMBRE,NIVELDOLOR,CEDULA) VALUES (?,?,?,?)";
+		String insert = "INSERT INTO EPISODIOS_X_PACIENTE (NOMBRE,NIVELDOLOR,CEDULA) VALUES (?,?,?)";
 		try {
 			preparedStatement = conn.conn.prepareStatement(insert);
 
-			preparedStatement.setLong(1, System.currentTimeMillis());
-			preparedStatement.setString(2, nombre);
-			preparedStatement.setString(3, nivelDolor);
-			preparedStatement.setInt(4, cedula);
+			preparedStatement.setString(1, nombre);
+			preparedStatement.setString(2, nivelDolor);
+			preparedStatement.setInt(3, cedula);
 
 			// execute insert SQL stetement
 			result = preparedStatement.executeUpdate();
 			System.out.println("sentencia ejecutada");
-			preparedStatement.close();
 			return result;
 
 		} catch (SQLException e) {

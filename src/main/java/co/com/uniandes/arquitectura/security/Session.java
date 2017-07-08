@@ -10,7 +10,6 @@ public class Session {
 
 	public static Session session;
 	static JsonObject authInfo;
-	//public SecurityServerClient securityServerClient;
 	
 	private Session(){
 		authInfo = new JsonObject();

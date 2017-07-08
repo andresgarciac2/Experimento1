@@ -8,13 +8,13 @@ public class HealthCheckServerController implements Controller{
 	
 	public void consultarEstadoServidor(RoutingContext ctx) {
 		Session session = Session.getSession();
-		if (session.verificarToken(ctx)) {
+		//if (session.verificarToken(ctx)) {
 			System.out.println("Ingreso al 82 a consultar el estado del servidor");
 			String mensajeEstado = "El servidor se encuentra arriba";
 			respondWithJson(ctx, 200, mensajeEstado);
-		} else {
-			String mensajeEstado = "Token no válido o nulo";
-			respondWithJson(ctx, 403, mensajeEstado);
-		}
+		//} else {
+		//	String mensajeEstado = "Token no válido o nulo";
+		//	respondWithJson(ctx, 403, mensajeEstado);
+		//}
 	}
 }
