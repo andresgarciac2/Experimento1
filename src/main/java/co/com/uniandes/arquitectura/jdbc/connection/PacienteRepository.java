@@ -60,7 +60,6 @@ public class PacienteRepository {
 				results.add(e);
 			}
 			System.out.println("sentencia ejecutada");
-			preparedStatement.close();
 			return results;
 		} catch (SQLException e) {
 			e.printStackTrace();

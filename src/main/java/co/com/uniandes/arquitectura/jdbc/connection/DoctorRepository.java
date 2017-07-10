@@ -32,7 +32,6 @@ static JDBCConnection conn = JDBCConnection.getDb();
 					 results.add(e);
 				    }
 				System.out.println("sentencia ejecutada");
-				preparedStatement.close();
 				return results;
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -60,7 +59,6 @@ static JDBCConnection conn = JDBCConnection.getDb();
 			// execute insert SQL stetement
 			result = preparedStatement.executeUpdate();
 			System.out.println("sentencia ejecutada");
-			preparedStatement.close();
 			return result;
 			
 		} catch (SQLException e) {

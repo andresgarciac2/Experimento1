@@ -11,8 +11,9 @@ import io.vertx.rxjava.ext.web.RoutingContext;
 
 public class PacienteController implements Controller {
 
+	Session session = Session.getSession();
+	
 	public void crearEpisodio(RoutingContext ctx) {
-		Session session = Session.getSession();
 		if (session.verificarToken(ctx)) {
 			EpisodioDTO req = extractBodyAsJson(ctx, EpisodioDTO.class);
 		    PacienteRepository.crearEpisodio(req.getNombre(), req.getNivelDolor(), req.getCedula());
@@ -25,9 +26,16 @@ public class PacienteController implements Controller {
 	}
 	
 	public void consultarDiagnostico(RoutingContext ctx) {
-	    int cedula = Integer.parseInt(ctx.getBodyAsString());
-	    List<DiagnosticoDTO> result = PacienteRepository.consultarDiagnostico(cedula);
-		respondWithJson(ctx, 200, result);
+		if (session.verificarToken(ctx)) {
+			int cedula = Integer.parseInt(ctx.getBodyAsString());
+		    List<DiagnosticoDTO> result = PacienteRepository.consultarDiagnostico(cedula);
+			respondWithJson(ctx, 200, result);
+		} else {
+			String mensajeEstado = "Token no válido o nulo";
+			respondWithJson(ctx, 403, mensajeEstado);
+		}
+		
+	    
 	}
 }
 

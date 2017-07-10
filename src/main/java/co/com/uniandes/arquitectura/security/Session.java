@@ -28,22 +28,24 @@ public class Session {
 	
 	public boolean verificarToken(RoutingContext ctx) {
 		HttpServerRequest request = ctx.request();
-		String authorization = request.headers().get(HttpHeaders.AUTHORIZATION);
+		String authorization = request.headers().get("TOKEN");
+		String id = request.headers().get("ID");
+		System.out.println("----------------------------------");
+		System.out.println("id: " + id);
 		System.out.println("token: " + authorization);
 
 		if (authorization != null) {
-			if (getSession().authInfo.containsKey(authorization)) {
-				System.out.println("el token : " + authorization + " existe");
+			if (getSession().authInfo.containsKey(id) 
+					&& getSession().authInfo.getValue(id).equals(authorization)) {
+				System.out.println("El token : " + authorization + " para el usuario : " + id + " existe");
 				return true;
 			} else {
-				System.out.println("el token no existe en sesion");
-				boolean esValido = SecurityServerClient.getSecurityServer()
-						.invocarVerificarToken(authorization);
-
+				System.out.println("El token no existe en sesion");
+				boolean esValido = SecurityServerClient.getSecurityServer().invocarVerificarToken(id, authorization);
 				System.out.println("esValido: " + esValido);
 
 				if (esValido) {
-					authInfo.put(authorization, authorization);
+					authInfo.put(id, authorization);
 					System.out.println("Se agrego el token: " + authorization);
 					return true;
 				} else {
