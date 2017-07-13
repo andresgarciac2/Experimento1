@@ -4,8 +4,6 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.rxjava.core.http.HttpServerRequest;
 import io.vertx.rxjava.ext.web.RoutingContext;
 
-import com.google.common.net.HttpHeaders;
-
 public class Session {
 
 	public static Session session;

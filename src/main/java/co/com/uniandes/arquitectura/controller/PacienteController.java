@@ -34,8 +34,6 @@ public class PacienteController implements Controller {
 			String mensajeEstado = "Token no válido o nulo";
 			respondWithJson(ctx, 403, mensajeEstado);
 		}
-		
-	    
 	}
 }
 

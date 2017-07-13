@@ -3,7 +3,6 @@ package co.com.uniandes.arquitectura.app;
 import co.com.uniandes.arquitectura.controller.DoctorController;
 import co.com.uniandes.arquitectura.controller.HealthCheckServerController;
 import co.com.uniandes.arquitectura.controller.PacienteController;
-import co.com.uniandes.arquitectura.controller.TokenController;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.JsonObject;
 import io.vertx.rxjava.core.AbstractVerticle;
@@ -16,7 +15,6 @@ public class VertxServer extends AbstractVerticle {
 	private PacienteController pacienteController = new PacienteController();
 	private DoctorController doctorController = new DoctorController();
 	private HealthCheckServerController healthCheckServerController = new HealthCheckServerController();
-	private TokenController tokenController = new TokenController();
 	
 	public static boolean esTokenValido;
 	static JsonObject authInfo;
@@ -42,7 +40,6 @@ public class VertxServer extends AbstractVerticle {
 		router.route(HttpMethod.POST, "/crearDiagnosticoXPaciente").handler(doctorController::crearDiagnosticoXPaciente);
 		router.route(HttpMethod.POST, "/consultarDiagnostico").handler(pacienteController::consultarDiagnostico);
 		router.route(HttpMethod.GET, "/").handler(healthCheckServerController::consultarEstadoServidor);
-		router.route(HttpMethod.GET, "/validarToken").handler(tokenController::consultarTokenValido);
 	}
 	
 }
