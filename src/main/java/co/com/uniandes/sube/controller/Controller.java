@@ -75,7 +75,7 @@ public interface Controller {
         try {
 			ctx.response()
 			        .setStatusCode(statusCode)
-			        .putHeader("Content-Type", "application/json;charset=" + encoding)
+			        .putHeader("Content-Type", "application/json;charset=UTF-8" + encoding)
 			        .end(mapper.writeValueAsString(body), encoding);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();

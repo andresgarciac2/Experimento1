@@ -2,20 +2,33 @@ package co.com.uniandes.sube.persistence;
 
 public class OfferStepConfigurationDTO {
 
-	int id;
+	long id;
+	long offerId;
 	String serializeSettings;
 	
 	/**
 	 * @return the id
 	 */
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
+	}	
+	/**
+	 * @return the offerId
+	 */
+	public long getOfferId() {
+		return offerId;
+	}
+	/**
+	 * @param offerId the offerId to set
+	 */
+	public void setOfferId(long offerId) {
+		this.offerId = offerId;
 	}
 	/**
 	 * @return the serializeSettings

@@ -2,8 +2,8 @@ package co.com.uniandes.sube.persistence;
 
 public class OfferStepDTO {
 	
-	int id;
-	int offerId;
+	long id;
+	long offerId;
 	OfferStepConfigurationDTO offerStepConfiguration;
 	OfferTransitionDTO offerTransition;
 	String name;	
@@ -11,26 +11,26 @@ public class OfferStepDTO {
 	/**
 	 * @return the id
 	 */
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	
 	/**
 	 * @return the offerId
 	 */
-	public int getOfferId() {
+	public long getOfferId() {
 		return offerId;
 	}
 	/**
 	 * @param offerId the offerId to set
 	 */
-	public void setOfferId(int offerId) {
+	public void setOfferId(long offerId) {
 		this.offerId = offerId;
 	}
 	/**

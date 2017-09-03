@@ -5,7 +5,7 @@ import java.util.List;
 
 public class AcademicOfferDTO {
 	
-	int id;
+	long id;
 	int createdBy;
 	Date creationDate;
 	Date startDate;
@@ -19,13 +19,13 @@ public class AcademicOfferDTO {
 	/**
 	 * @return the id
 	 */
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	/**

@@ -25,7 +25,7 @@ public class VertxServer extends AbstractVerticle {
         setRoutes(servicesRouter);
 		HttpServer server = vertx.createHttpServer();
         server.requestStream().toObservable().subscribe(servicesRouter::accept);
-        server.listen(8082, "0.0.0.0", bindingResult -> {
+        server.listen(8081, "0.0.0.0", bindingResult -> {
             if (bindingResult.succeeded()) {
             	System.out.println("Success");
             }
@@ -35,11 +35,11 @@ public class VertxServer extends AbstractVerticle {
 	private void setRoutes(Router router) {
 		router.route().handler(BodyHandler.create());
 		
-		router.route(HttpMethod.GET, "/").handler(healthCheckServerController::getServerStatus);
-		router.route(HttpMethod.POST, "/").handler(academicOfferController::createOffer);
-		router.route(HttpMethod.PUT, "/").handler(academicOfferController::updateOffer);
-		router.route(HttpMethod.POST, "/").handler(offerStepController::createOfferStep);
-		router.route(HttpMethod.PUT, "/").handler(offerStepController::updateOfferStep);
+		router.route(HttpMethod.GET, "/status").handler(healthCheckServerController::getServerStatus);
+		router.route(HttpMethod.POST, "/academicOffer").handler(academicOfferController::createOffer);
+		router.route(HttpMethod.PUT, "/academicOffer").handler(academicOfferController::updateOffer);
+		router.route(HttpMethod.POST, "/offerStep").handler(offerStepController::createOfferStep);
+		router.route(HttpMethod.PUT, "/offerStep").handler(offerStepController::updateOfferStep);
 	}
 	
 }

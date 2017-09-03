@@ -47,7 +47,7 @@ dependencies {
 shadowJar {
     classifier = 'fat'
     manifest {
-        attributes 'Main-Verticle': 'co.com.uniandes.arquitectura.app.VertxServer'
+        attributes 'Main-Verticle': 'co.com.uniandes.sube.app.VertxServer'
     }
     mergeServiceFiles {
         include 'META-INF/services/io.vertx.core.spi.VerticleFactory'
