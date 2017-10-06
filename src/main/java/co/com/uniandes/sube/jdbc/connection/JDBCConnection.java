@@ -14,7 +14,7 @@ public final class  JDBCConnection {
     public static JDBCConnection db;
     
     private JDBCConnection() {
-        String url= "jdbc:oracle:thin:@localhost:1522:xe";
+        String url= "jdbc:oracle:thin:@localhost:1521:xe";
         String driver = "oracle.jdbc.driver.OracleDriver";
         String userName = "uniandes";
         String password = "manage";

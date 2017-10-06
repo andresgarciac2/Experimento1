@@ -9,27 +9,27 @@ public class AcademicOfferController implements Controller{
 	
 	public void createOffer(RoutingContext ctx) {
 		Session session = Session.getSession();
-		//if (session.verificarToken(ctx)) {
+		if (session.verificarToken(ctx)) {
 			AcademicOfferDTO req = extractBodyAsJson(ctx, AcademicOfferDTO.class);
 			AcademicOfferRepository.createAcademicOffer(req);
 			respondWithJson(ctx, 200, req);
 			
-		//}  else {
-		//	String mensajeEstado = "Token no válido o nulo";
-		//	respondWithJson(ctx, 403, mensajeEstado);
-		//}
+		}  else {
+			String stateMessage = "Invalid or null token";
+			respondWithJson(ctx, 403, stateMessage);
+		}
 	}
 	
 	public void updateOffer(RoutingContext ctx) {
 		Session session = Session.getSession();
-		//if (session.verificarToken(ctx)) {
+		if (session.verificarToken(ctx)) {
 			AcademicOfferDTO req = extractBodyAsJson(ctx, AcademicOfferDTO.class);
 			AcademicOfferRepository.updateAcademicOffer(req);
 			respondWithJson(ctx, 200, req);
-		//}  else {
-		//	String mensajeEstado = "Token no válido o nulo";
-		//	respondWithJson(ctx, 403, mensajeEstado);
-		//}
+		}  else {
+			String stateMessage = "Invalid or null token";
+			respondWithJson(ctx, 403, stateMessage);
+		}
 	}
 	
 }

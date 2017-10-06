@@ -9,25 +9,25 @@ public class OfferStepController implements Controller{
 		
 	public void createOfferStep(RoutingContext ctx) {
 		Session session = Session.getSession();
-		//if (session.verificarToken(ctx)) {
+		if (session.verificarToken(ctx)) {
 			OfferStepDTO req = extractBodyAsJson(ctx, OfferStepDTO.class);
 			OfferStepRepository.createOfferStep(req);
 			respondWithJson(ctx, 200, req);
-		//}  else {
-		//	String mensajeEstado = "Token no válido o nulo";
-		//	respondWithJson(ctx, 403, mensajeEstado);
-		//}
+		}  else {
+			String stateMessage = "Invalid or null token";
+			respondWithJson(ctx, 403, stateMessage);
+		}
 	}
 	
 	public void updateOfferStep(RoutingContext ctx) {
 		Session session = Session.getSession();
-		//if (session.verificarToken(ctx)) {
+		if (session.verificarToken(ctx)) {
 			OfferStepDTO req = extractBodyAsJson(ctx, OfferStepDTO.class);
 			OfferStepRepository.updateOfferStep(req);
 			respondWithJson(ctx, 200, req);
-		//}  else {
-		//	String mensajeEstado = "Token no válido o nulo";
-		//	respondWithJson(ctx, 403, mensajeEstado);
-		//}
+		}  else {
+			String stateMessage = "Invalid or null token";
+			respondWithJson(ctx, 403, stateMessage);
+		}
 	}
 }
