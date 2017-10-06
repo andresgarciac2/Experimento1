@@ -33,6 +33,18 @@ public class VertxServer extends AbstractVerticle {
 	}
 	
 	private void setRoutes(Router router) {
+		
+		router.route().handler(io.vertx.rxjava.ext.web.handler.CorsHandler.create("*")
+				.allowedMethod(io.vertx.core.http.HttpMethod.GET)
+				.allowedMethod(io.vertx.core.http.HttpMethod.POST)
+				.allowCredentials(true)
+				.allowedHeader("Access-Control-Request-Method")
+				.allowedHeader("Access-Control-Allow-Origin")
+				.allowedHeader("Access-Control-Allow-Headers")
+				.allowedHeader("X-Requested-With")
+				.allowedHeader("Content-Type")
+				.allowedHeader("TOKEN")
+				.allowedHeader("ID"));
 		router.route().handler(BodyHandler.create());
 		
 		router.route(HttpMethod.GET, "/status").handler(healthCheckServerController::getServerStatus);
