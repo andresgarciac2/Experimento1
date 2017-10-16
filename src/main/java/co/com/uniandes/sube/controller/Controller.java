@@ -11,7 +11,9 @@ import io.vertx.core.json.DecodeException;
 import io.vertx.rxjava.ext.web.RoutingContext;
 
 /**
- * Implementa acciones comunes en los controladores
+ * Class to controller the response 
+ * @author Javier Mesa
+ *
  */
 public interface Controller {
 
@@ -19,12 +21,10 @@ public interface Controller {
     public static final ObjectMapper mapper = new ObjectMapper();
 	
 	 /**
-     * Extrae el cuerpo de una petición como un JSON
-     *
-     * @param ctx   Contexto del request
-     * @param clazz Clase del objeto destino
-     * @param <T>   Tipo de la clase del objeto destino
-     * @return Una instancia creada del objeto destino
+     * Method to get body request like JSON object
+     * @param ctx Request context
+     * @param clazz target object
+     * @return a target instance
      */
     default <T> T extractBodyAsJson(RoutingContext ctx, Class<T> clazz) {
         try {
@@ -43,9 +43,8 @@ public interface Controller {
     }
 
     /**
-     * Responde una petición http sin contenido (statusCode 204)
-     *
-     * @param ctx Contexto del request
+     * Method to get a response without content
+     * @param ctx Request context
      */
     default void respondNoContent(RoutingContext ctx) {
         ctx.response()
@@ -54,21 +53,19 @@ public interface Controller {
     }
 
     /**
-     * Responde una petición http con un JSON (statusCode 200)
-     *
-     * @param ctx  Contexto del request
-     * @param body Objeto a convertir en JSON
+     * Method to response a request http like a JSON Object
+     * @param ctx  Request context
+     * @param body Object to convert to JSON Object
      */
     default void respondWithJson(RoutingContext ctx, Object body) {
     	respondWithJson(ctx, 200, body);
     }
 
     /**
-     * Responde una petición http con un JSON
-     *
-     * @param ctx        Contexto del request
-     * @param statusCode Status code de la respuesta
-     * @param body       Objeto a convertir en JSON
+     * Method to response a http resquest like JSON Object
+     * @param ctx Request context
+     * @param statusCode status code of response
+     * @param body Object to convert to JSON Object
      */
     default void respondWithJson(RoutingContext ctx, int statusCode, Object body) {
         String encoding = "UTF-8";

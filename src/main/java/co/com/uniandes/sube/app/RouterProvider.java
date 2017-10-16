@@ -8,7 +8,8 @@ import io.vertx.rxjava.ext.web.Router;
 import io.vertx.rxjava.ext.web.RoutingContext;
 
 /**
- * Provider guice para la clase {@link Router}
+ * Class to server routing 
+ * @author Javier 
  */
 public class RouterProvider implements Provider<Router> {
 
@@ -42,11 +43,9 @@ public class RouterProvider implements Provider<Router> {
     // ----------------------------------------
     // private methods
     // ----------------------------------------
-
    
     private void setRoutes(Router router) {
     	router.route(HttpMethod.POST, "/temporal").handler(this::temporal);
-
     }
 
     private void status(RoutingContext ctx) {

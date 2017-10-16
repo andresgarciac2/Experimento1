@@ -1,12 +1,20 @@
 package co.com.uniandes.sube.controller;
 
 import io.vertx.rxjava.ext.web.RoutingContext;
-import co.com.uniandes.sube.jdbc.connection.OfferStepRepository;
-import co.com.uniandes.sube.persistence.OfferStepDTO;
+import co.com.uniandes.sube.dto.OfferStepDTO;
+import co.com.uniandes.sube.repository.OfferStepRepository;
 import co.com.uniandes.sube.security.Session;
 
+/**
+ * Class to provide the services to manage offer step
+ * @author Javier Mesa
+ */
 public class OfferStepController implements Controller{
-		
+	
+	/**
+	 * Method to create a offer step in the system
+	 * @param ctx Request context
+	 */
 	public void createOfferStep(RoutingContext ctx) {
 		Session session = Session.getSession();
 		if (session.verificarToken(ctx)) {
@@ -19,6 +27,10 @@ public class OfferStepController implements Controller{
 		}
 	}
 	
+	/**
+	 * Method to update a offer step in the system
+	 * @param ctx Request context
+	 */
 	public void updateOfferStep(RoutingContext ctx) {
 		Session session = Session.getSession();
 		if (session.verificarToken(ctx)) {
