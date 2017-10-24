@@ -6,7 +6,9 @@ public class OfferStepDTO {
 	long offerId;
 	OfferStepConfigurationDTO offerStepConfiguration;
 	OfferTransitionDTO offerTransition;
-	String name;	
+	String name;
+	long type;
+	int position;
 	
 	/**
 	 * @return the id
@@ -70,4 +72,30 @@ public class OfferStepDTO {
 	public void setOfferTransition(OfferTransitionDTO offerTransition) {
 		this.offerTransition = offerTransition;
 	}
+	/**
+	 * @return the type
+	 */
+	public long getType() {
+		return type;
+	}
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(long type) {
+		this.type = type;
+	}
+	/**
+	 * @return the position
+	 */
+	public int getPosition() {
+		return position;
+	}
+	/**
+	 * @param position the position to set
+	 */
+	public void setPosition(int position) {
+		this.position = position;
+	}
+	
+	
 }

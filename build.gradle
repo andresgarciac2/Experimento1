@@ -5,9 +5,9 @@ plugins {
     id 'idea'
 }
 
-group 'rickhigh'
+group 'co.com.uniandes.sube'
 version '1.0'
-
+apply plugin: 'maven'
 
 idea {
     project {
@@ -41,9 +41,7 @@ dependencies {
     compile "org.hibernate:hibernate-core:4.3.6.Final"
     compile group: 'com.github.noraui', name: 'ojdbc7', version: '12.1.0.2' 
     
-  
- 
-    compile files('lib/DBSube.jar')
+    compile "co.com.uniandes.sube:Persistence:1.0"
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 

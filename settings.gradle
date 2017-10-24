@@ -16,4 +16,4 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'Experimento1'
+rootProject.name = 'SUBE_WS'
