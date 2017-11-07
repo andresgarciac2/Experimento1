@@ -36,7 +36,7 @@ public class VertxServer extends AbstractVerticle {
         setRoutes(servicesRouter);
 		HttpServer server = vertx.createHttpServer();
         server.requestStream().toObservable().subscribe(servicesRouter::accept);
-        server.listen(8081, "0.0.0.0", bindingResult -> {
+        server.listen(8082, "0.0.0.0", bindingResult -> {
             if (bindingResult.succeeded()) {
             	HibernateUtility.getSessionFactory().openSession();
             	System.out.println("Success");
@@ -54,6 +54,7 @@ public class VertxServer extends AbstractVerticle {
 		router.route().handler(io.vertx.rxjava.ext.web.handler.CorsHandler.create("*")
 				.allowedMethod(io.vertx.core.http.HttpMethod.GET)
 				.allowedMethod(io.vertx.core.http.HttpMethod.POST)
+				.allowedMethod(io.vertx.core.http.HttpMethod.PUT)
 				.allowCredentials(true)
 				.allowedHeader("Access-Control-Request-Method")
 				.allowedHeader("Access-Control-Allow-Origin")
