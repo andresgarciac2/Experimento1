@@ -6,6 +6,7 @@ import com.sube.utilities.hibernate.HibernateUtility;
 import co.com.uniandes.sube.controller.AcademicOfferController;
 import co.com.uniandes.sube.controller.HealthCheckServerController;
 import co.com.uniandes.sube.controller.OfferStepController;
+import co.com.uniandes.sube.controller.PostulationController;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.JsonObject;
 import io.vertx.rxjava.core.AbstractVerticle;
@@ -23,6 +24,7 @@ public class VertxServer extends AbstractVerticle {
 	// Variables
 	private AcademicOfferController academicOfferController = new AcademicOfferController();
 	private OfferStepController offerStepController = new OfferStepController();
+	private PostulationController postulationController = new PostulationController();
 	private HealthCheckServerController healthCheckServerController = new HealthCheckServerController();
 	public static boolean esTokenValido;
 	static JsonObject authInfo;
@@ -71,6 +73,8 @@ public class VertxServer extends AbstractVerticle {
 		router.route(HttpMethod.POST, "/offerStep").handler(offerStepController::createOfferStep);
 		router.route(HttpMethod.PUT, "/offerStep").handler(offerStepController::updateOfferStep);
 		router.route(HttpMethod.GET, "/offerStep").handler(offerStepController::getOfferSteps);
+		router.route(HttpMethod.POST, "/postulation").handler(postulationController::createPostulation);
+		router.route(HttpMethod.PUT, "/postulation").handler(postulationController::updatePostulation);
 	}
 	
 }
