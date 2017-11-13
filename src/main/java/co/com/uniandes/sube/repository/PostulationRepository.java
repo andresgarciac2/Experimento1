@@ -3,11 +3,14 @@ package co.com.uniandes.sube.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 
+import co.com.uniandes.sube.dto.AcademicOfferDTO;
 import co.com.uniandes.sube.dto.PostulationDTO;
 import co.com.uniandes.sube.dto.PostulationInfoDTO;
 import co.com.uniandes.sube.utilities.entities.Postulation;
+import co.com.uniandes.sube.utilities.entities.PostulationInfo;
 
 import com.sube.utilities.hibernate.HibernateUtility;
 
@@ -83,4 +86,58 @@ public class PostulationRepository {
 		
 	}
 	
+	
+	public static List<PostulationDTO> getPostulationsOffer(AcademicOfferDTO offer){
+		// Return list
+		List<PostulationDTO> postulationDTOList  = new ArrayList<>();
+		
+		Session session = HibernateUtility.getSessionFactory().openSession();
+		Query qPostulation = session.getNamedQuery("Postulation.findByOfferId");
+		qPostulation.setParameter("offerId", (int)offer.getId());
+		
+		// Query result list of postulations
+		List<Postulation> postulationList = qPostulation.list();
+		
+		// Iterate from result list of postulations
+		for (Postulation p : postulationList) {
+			// List of postulations info of postulations list
+			List<PostulationInfoDTO> postulationInfoDTOList  = new ArrayList<>();
+			
+			PostulationDTO pDTO = new PostulationDTO();
+			pDTO.setId(p.getId());
+			pDTO.setOfferId(p.getOfferId());
+			pDTO.setState(p.getState());
+			pDTO.setUserId(p.getUserId());
+			pDTO.setCurrentStep(p.getCurrentStep());
+			pDTO.setCreationDate(p.getCreationDate());
+			
+			// Query to get postulation info of postulation
+			Query qPostulationInfo = session.getNamedQuery("PostulationInfo.findByPostulationId");
+			qPostulationInfo.setParameter("postulationId", p.getId());
+			
+			// Result list from query to get the postulation info
+			List<PostulationInfo> postulationInfo= qPostulationInfo.list();
+			
+			// Iterate from postulation info
+			for (PostulationInfo pI : postulationInfo) {
+				PostulationInfoDTO pIDTO = new PostulationInfoDTO();
+				pIDTO.setId(pI.getId());
+				pIDTO.setPostulationId(pI.getPostulationId());
+				pIDTO.setAttributeId(pI.getAttributeId());
+				pIDTO.setBoolValue(pI.getBoolValue());
+				pIDTO.setDateValue(pI.getDateValue());
+				pIDTO.setDecimalValue(pI.getDecimalValue());
+				pIDTO.setIntValue(pI.getIntValue());
+				pIDTO.setStringValue(pI.getStringValue());
+				
+				postulationInfoDTOList.add(pIDTO);
+			}
+			
+			pDTO.setPostulationInfoList(postulationInfoDTOList);
+			
+			postulationDTOList.add(pDTO);
+		}
+		
+	    return postulationDTOList;
+	}
 }

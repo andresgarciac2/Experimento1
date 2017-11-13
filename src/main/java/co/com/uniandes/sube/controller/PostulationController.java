@@ -1,6 +1,7 @@
 package co.com.uniandes.sube.controller;
 
 import io.vertx.rxjava.ext.web.RoutingContext;
+import co.com.uniandes.sube.dto.AcademicOfferDTO;
 import co.com.uniandes.sube.dto.PostulationDTO;
 import co.com.uniandes.sube.repository.PostulationRepository;
 import co.com.uniandes.sube.security.Session;
@@ -43,5 +44,23 @@ public class PostulationController implements Controller{
 		//}
 	}
 	
-	
+	/**
+	 * Method to get the postulations a offer
+	 * @param ctx Request context
+	 */
+	public void getPostulationsOffer(RoutingContext ctx) {
+		Session session = Session.getSession();
+		//if (session.verificarToken(ctx)) {
+			AcademicOfferDTO req = new AcademicOfferDTO();
+
+			if(ctx.request().getParam("offerId") != null){
+				req.setId((Integer.valueOf(ctx.request().getParam("offerId"))));
+			}
+			
+			respondWithJson(ctx, 200, PostulationRepository.getPostulationsOffer(req));
+		//}  else {
+		//	String stateMessage = "Invalid or null token";
+		//	respondWithJson(ctx, 403, stateMessage);
+		//}
+	}
 }
