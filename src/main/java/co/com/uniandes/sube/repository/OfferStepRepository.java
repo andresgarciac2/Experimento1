@@ -1,6 +1,5 @@
 package co.com.uniandes.sube.repository;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +13,9 @@ import com.sube.utilities.hibernate.HibernateUtility;
 import co.com.uniandes.sube.dto.AcademicOfferDTO;
 import co.com.uniandes.sube.dto.OfferStepConfigurationDTO;
 import co.com.uniandes.sube.dto.OfferStepDTO;
+import co.com.uniandes.sube.utilities.entities.AcademicOffer;
 import co.com.uniandes.sube.utilities.entities.OfferStep;
+import co.com.uniandes.sube.utilities.entities.OfferStepConfiguration;
 
 /**
  * Class to manage the transactions of table Offer Step
@@ -29,83 +30,59 @@ public class OfferStepRepository {
 	public static OfferStepDTO createOfferStep(OfferStepDTO step){
 		Session session = HibernateUtility.getSessionFactory().openSession();
 
+		// Create the step configuration
 		step.setOfferStepConfiguration(OfferStepConfigurationRepository.createOfferStepConfiguration(step.getOfferStepConfiguration()));
+		
+		OfferStepConfiguration osc = new OfferStepConfiguration();
+		osc.setId((int) step.getOfferStepConfiguration().getId());
+		
+		AcademicOffer ao = new AcademicOffer();
+		ao.setId((int) step.getOfferId());
+		
+		// Create the step
 		OfferStep os = new OfferStep();
 		os.setConfigurationId((int) step.getOfferStepConfiguration().getId());
 		os.setOfferId((int) step.getOfferId());
 		os.setName(step.getName());
 		os.setPosition(step.getPosition());
-		os.setType((int)step.getType());
-		
+		os.setType((int)step.getType());			
+
 		session.beginTransaction();		
 		session.save(os);
 		session.getTransaction().commit();
 		Integer id = (Integer)session.getIdentifier(os);
 		step.setId(id);
 		System.out.println("Offer Step successfully created with id " + step.getId() + ". Academic Offer id: " + step.getOfferId());
-		
-		
-		
-	    /*long idStep = 0;
-	    PreparedStatement preparedStatement = null;
-	    String insertOffer = "INSERT INTO OFFER_STEP (CONFIGURATION_ID, OFFER_ID, NAME) VALUES (?,?,?)";
-		try {
-			preparedStatement = conn.conn.prepareStatement(insertOffer, new String[]{"ID"});
-			
-			step.setOfferStepConfiguration(OfferStepConfigurationRepository.createOfferStepConfiguration(step.getOfferStepConfiguration()));
-			
-			preparedStatement.setLong(1, step.getOfferStepConfiguration().getId());
-			preparedStatement.setLong(2, step.getOfferId());
-			preparedStatement.setString(3, step.getName());
 
-			// execute insert SQL statement
-			preparedStatement.executeUpdate();
-			
-			ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-			
-			if (generatedKeys.next()) {
-				idStep = generatedKeys.getLong(1);
-				step.setId(idStep);
-            }
-           
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}finally {
-			try {
-				preparedStatement.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}*/
-	    return step;
+		return step;
 	}
 	
-	public static int updateOfferStep(OfferStepDTO step){
-		int result = 0;
-	    PreparedStatement preparedStatement = null;
-	    String insertOffer = "UPDATE OFFER_STEP SET CONFIGURATION_ID=?, OFFER_ID=?, NAME=? WHERE ID=?";
-		try {
-			preparedStatement = conn.conn.prepareStatement(insertOffer);
+	public static void updateOfferStep(OfferStepDTO step){
+		Session session = HibernateUtility.getSessionFactory().openSession();
 
-			preparedStatement.setLong(1, step.getOfferStepConfiguration().getId());
-			preparedStatement.setLong(2, step.getOfferId());
-			preparedStatement.setString(3, step.getName());
-
-			// execute insert SQL stetement
-			result = preparedStatement.executeUpdate();
-			preparedStatement.close();
-			return result;
+		// Update the step configuration
+		step.setOfferStepConfiguration(OfferStepConfigurationRepository.updateOfferStepConfiguration(step.getOfferStepConfiguration()));
+		
+		// Create or update Offer transition
+		if(step.getOfferTransition().getId() ==0){
+			step.setOfferTransition(OfferTransitionRepository.createOfferTransition(step.getOfferTransition()));
+		} else {
+			step.setOfferTransition(OfferTransitionRepository.updateOfferTransition(step.getOfferTransition()));
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}finally {
-			try {
-				preparedStatement.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
-	    return result;
+		
+		// Update the step
+		OfferStep os = (OfferStep) session.get(OfferStep.class, (int)step.getId());
+		os.setOfferId((int) step.getOfferId());
+		os.setName(step.getName());
+		os.setPosition(step.getPosition());
+		os.setType((int)step.getType());
+		
+		session.beginTransaction();		
+		session.merge(os);
+		session.getTransaction().commit();
+		System.out.println("Offer Step successfully updated with id " + step.getId() + ". Academic Offer id: " + step.getOfferId());
+	
 	}
 	
 	
@@ -125,7 +102,7 @@ public class OfferStepRepository {
 	    try {
 			preparedStatement = conn.conn.prepareStatement(getOffers);
 			
-			// execute insert SQL stetement
+			// execute insert SQL statement
 			ResultSet rs = preparedStatement.executeQuery();
 			
 			while(rs.next()){
@@ -137,15 +114,13 @@ public class OfferStepRepository {
 				offerStepTemp.setOfferId(rs.getInt(5));
 				int configurationId = rs.getInt(6);
 				
-				
-				
 			    String query = "SELECT ID, OFFER_ID, SERIALIZE_SETTINGS FROM OFFER_STEP_CONFIGURATION WHERE ID = " + configurationId;
 			    
 			    ps = conn.conn.prepareStatement(query);
 			    
 			    System.out.println("query configuration step: " + query );
 				
-			    // execute insert SQL stetement
+			    // execute insert SQL statement
 				ResultSet rsQuery = ps.executeQuery();
 				
 				while(rsQuery.next()){

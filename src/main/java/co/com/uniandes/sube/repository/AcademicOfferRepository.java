@@ -9,8 +9,6 @@ import java.util.List;
 
 import org.hibernate.Session;
 
-
-
 import com.sube.utilities.hibernate.HibernateUtility;
 
 import co.com.uniandes.sube.dto.AcademicOfferDTO;
@@ -45,43 +43,7 @@ public class AcademicOfferRepository {
 		Integer id = (Integer)session.getIdentifier(ao);
 		System.out.println("Academic Offer successfully created with id: " + id);
 		offer.setId(id);
-		
-		/*
-	    long idOffer = 0;
-	    PreparedStatement preparedStatement = null;
-	    String insertOffer = "INSERT INTO ACADEMIC_OFFER (CREATE_BY, START_DATE, END_DATE, NAME, DESCRIPTION, TYPE, STATE) VALUES (?,?,?,?,?,?,?)";
-		try {
-			preparedStatement = conn.conn.prepareStatement(insertOffer, new String[]{"ID"});
-
-			preparedStatement.setInt(1, offer.getCreatedBy());
-			preparedStatement.setDate(2, new Date(offer.getStartDate().getTime()));
-			preparedStatement.setDate(3, new Date(offer.getEndDate().getTime()));
-			preparedStatement.setString(4, offer.getName());
-			preparedStatement.setString(5, offer.getDescription());
-			preparedStatement.setInt(6, offer.getType());
-			preparedStatement.setInt(7, offer.getState());
-
-			// execute insert SQL stetement
-			preparedStatement.executeUpdate();
-			
-			ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-			
-			if (generatedKeys.next()) {
-            	idOffer = generatedKeys.getLong(1);
-            	offer.setId(idOffer);
-            }
-           
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}finally {
-			try {
-				preparedStatement.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		*/
+	
 	    return offer;
 	}
 	

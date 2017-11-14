@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import com.sube.utilities.hibernate.HibernateUtility;
 
 import co.com.uniandes.sube.dto.OfferStepConfigurationDTO;
+import co.com.uniandes.sube.utilities.entities.AcademicOffer;
 import co.com.uniandes.sube.utilities.entities.OfferStepConfiguration;
 
 public class OfferStepConfigurationRepository {
@@ -16,6 +17,10 @@ public class OfferStepConfigurationRepository {
 		
 		Session session = HibernateUtility.getSessionFactory().openSession();
 		
+		AcademicOffer ao = new AcademicOffer();
+		ao.setId((int) stepConfig.getOfferId());
+		
+		// Create the step configuration
 		OfferStepConfiguration osc = new OfferStepConfiguration();
 		osc.setOfferId((int) stepConfig.getOfferId());
 		osc.setSerializeSettings(stepConfig.getSerializeSettings());
@@ -23,39 +28,28 @@ public class OfferStepConfigurationRepository {
 		session.save(osc);
 		session.getTransaction().commit();
 		Integer id = (Integer)session.getIdentifier(osc);
-		System.out.println("Se ha insertado la configuración del paso " + id);
+		System.out.println("Step configuration successfully created with id " + id);
 		stepConfig.setId(id);
 		
-		
-		
-	    /*long idStepConfig= 0;
-	    PreparedStatement preparedStatement = null;
-	    String insertOffer = "INSERT INTO OFFER_STEP_CONFIGURATION (OFFER_ID, SERIALIZE_SETTINGS) VALUES (?,?)";
-		try {
-			preparedStatement = conn.conn.prepareStatement(insertOffer, new String[]{"ID"});
-
-			preparedStatement.setLong(1, stepConfig.getOfferId());
-			preparedStatement.setString(2, stepConfig.getSerializeSettings());
-
-			// execute insert SQL statement
-			preparedStatement.executeUpdate();
-			
-			ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-			
-			if (generatedKeys.next()) {
-				idStepConfig = generatedKeys.getLong(1);
-            }
-           
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}finally {
-			try {
-				preparedStatement.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}*/
 	    return stepConfig;
 	}	
+	
+	
+	public static OfferStepConfigurationDTO updateOfferStepConfiguration(OfferStepConfigurationDTO stepConfig){
+		
+		Session session = HibernateUtility.getSessionFactory().openSession();
+		
+		// Update the step configuration
+		OfferStepConfiguration osc = (OfferStepConfiguration) session.get(OfferStepConfiguration.class, (int)stepConfig.getId());
+		osc.setSerializeSettings(stepConfig.getSerializeSettings());
+		session.beginTransaction();		
+		session.merge(osc);
+		session.getTransaction().commit();
+		System.out.println("Step configuration successfully updated  with id " + stepConfig.getId());
+		
+		return stepConfig;
+		
+	}
+	
 	
 }

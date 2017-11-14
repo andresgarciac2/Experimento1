@@ -1,46 +1,57 @@
 package co.com.uniandes.sube.repository;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import org.hibernate.Session;
+
+import com.sube.utilities.hibernate.HibernateUtility;
 
 import co.com.uniandes.sube.dto.OfferTransitionDTO;
+import co.com.uniandes.sube.utilities.entities.OfferTransition;
 
 public class OfferTransitionRepository {
 	
 	static JDBCConnection conn = JDBCConnection.getDb();
 	
-	public static long createOfferTransition(OfferTransitionDTO stepTrans){
-	    long idOfferTrans = 0;
-	    PreparedStatement preparedStatement = null;
-	    String insertOffer = "INSERT INTO OFFER_TRANSITION (OFFER_ID, SOURCE_STEP, TARGET_STEP, CONDITIONS) VALUES (?,?,?,?)";
-		try {
-			preparedStatement = conn.conn.prepareStatement(insertOffer, new String[]{"ID"});
-
-			preparedStatement.setLong(1, stepTrans.getOfferId());
-			preparedStatement.setLong(2, stepTrans.getSourceStep());
-			preparedStatement.setLong(3, stepTrans.getTargetStep());
-			preparedStatement.setString(4, stepTrans.getConditions());
-			
-			// execute insert SQL statement
-			preparedStatement.executeUpdate();
-			
-			ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-			
-			if (generatedKeys.next()) {
-				idOfferTrans = generatedKeys.getLong(1);
-            }
-           
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}finally {
-			try {
-				preparedStatement.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	    return idOfferTrans;
+	public static OfferTransitionDTO createOfferTransition(OfferTransitionDTO offerTrans){
+		Session session = HibernateUtility.getSessionFactory().openSession();
+		
+		// Create the offer transition
+		OfferTransition ot = new OfferTransition();
+		ot.setOfferId((int) offerTrans.getOfferId());
+		ot.setSourceStep((int)offerTrans.getSourceStep());
+		ot.setTargetStep((int)offerTrans.getTargetStep());
+		ot.setConditions(offerTrans.getConditions());
+		
+		session.beginTransaction();		
+		session.save(ot);
+		session.getTransaction().commit();
+		Integer id = (Integer)session.getIdentifier(ot);
+		System.out.println("Offer Transition successfully created for offer " + offerTrans.getOfferId());
+		offerTrans.setId(id);
+		
+	    return offerTrans;
 	}
 	
+	
+	public static OfferTransitionDTO updateOfferTransition(OfferTransitionDTO offerTrans){
+		Session session = HibernateUtility.getSessionFactory().openSession();
+		
+		OfferTransition ot = (OfferTransition) session.get(OfferTransition.class, (int)offerTrans.getId());
+		ot.setSourceStep((int)offerTrans.getSourceStep());
+		ot.setTargetStep((int)offerTrans.getTargetStep());
+		session.beginTransaction();		
+		session.merge(ot);
+		session.getTransaction().commit();
+		System.out.println("Offer Transition successfully updated for offer " + offerTrans.getOfferId());
+		
+	    return offerTrans;
+	}
+	
+	
+	public static OfferTransition getOfferTransition(OfferTransitionDTO offerTrans){
+		Session session = HibernateUtility.getSessionFactory().openSession();
+		
+		OfferTransition ot = (OfferTransition) session.get(OfferTransition.class, (int)offerTrans.getId());
+		
+		return ot;
+	}
 }
