@@ -64,9 +64,9 @@ public class OfferStepRepository {
 		step.setOfferStepConfiguration(OfferStepConfigurationRepository.updateOfferStepConfiguration(step.getOfferStepConfiguration()));
 		
 		// Create or update Offer transition
-		if(step.getOfferTransition().getId() ==0){
+		if(step.getOfferTransition() != null && step.getOfferTransition().getId() ==0){
 			step.setOfferTransition(OfferTransitionRepository.createOfferTransition(step.getOfferTransition()));
-		} else {
+		} else if(step.getOfferTransition() != null){
 			step.setOfferTransition(OfferTransitionRepository.updateOfferTransition(step.getOfferTransition()));
 			
 		}
