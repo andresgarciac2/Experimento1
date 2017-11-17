@@ -1,9 +1,11 @@
 package co.com.uniandes.sube.repository;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 import co.com.uniandes.sube.dto.AttributeDTO;
 import co.com.uniandes.sube.utilities.entities.Attribute;
+import co.com.uniandes.sube.utilities.entities.OfferStep;
 
 import com.sube.utilities.hibernate.HibernateUtility;
 
@@ -13,18 +15,33 @@ public class AttributeRepository {
 	
 	public static AttributeDTO createAttribute(AttributeDTO attribute){
 		Session session = HibernateUtility.getSessionFactory().openSession();
-
-		// Create the attribute
-		Attribute a = new Attribute();
-		a.setName(attribute.getName());
-		a.setType(attribute.getType());
 		
-		session.beginTransaction();		
-		session.save(a);
-		session.getTransaction().commit();
-		Integer id = (Integer)session.getIdentifier(a);
-		attribute.setId(id);
-		System.out.println("Attribute successfully created with id " + attribute.getId());
+		// Query to get if exist attribute
+		Query qAttribute = session.getNamedQuery("Attribute.findByNameAndType");
+		qAttribute.setParameter("name", attribute.getName());
+		qAttribute.setParameter("type", attribute.getType());
+		
+		Attribute at= qAttribute.list().isEmpty()?null: (Attribute)qAttribute.list().get(0);
+		
+		if(at == null){
+			// Create the attribute
+			Attribute a = new Attribute();
+			a.setName(attribute.getName());
+			a.setType(attribute.getType());
+			
+			session.beginTransaction();		
+			session.save(a);
+			session.getTransaction().commit();
+			Integer id = (Integer)session.getIdentifier(a);
+			attribute.setId(id);
+			System.out.println("Attribute successfully created with id " + attribute.getId());
+		} else {
+			attribute.setId(at.getId());
+			System.out.println("Attribute already existed with id " + at.getId());
+		}
+		
+
+		
 
 		return attribute;
 	}

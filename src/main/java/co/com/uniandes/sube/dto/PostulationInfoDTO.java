@@ -6,13 +6,14 @@ import java.util.Date;
 public class PostulationInfoDTO {
 
 	private int id;
-	private int attributeId;
 	private int postulationId;
 	private int boolValue;
 	private Date dateValue;
 	private double decimalValue;
 	private int intValue;	
 	private String stringValue;
+	private AttributeDTO attribute;
+	
 	/**
 	 * @return the id
 	 */
@@ -24,18 +25,6 @@ public class PostulationInfoDTO {
 	 */
 	public void setId(int id) {
 		this.id = id;
-	}
-	/**
-	 * @return the attributeId
-	 */
-	public int getAttributeId() {
-		return attributeId;
-	}
-	/**
-	 * @param attributeId the attributeId to set
-	 */
-	public void setAttributeId(int attributeId) {
-		this.attributeId = attributeId;
 	}
 	/**
 	 * @return the postulationId
@@ -108,6 +97,18 @@ public class PostulationInfoDTO {
 	 */
 	public void setStringValue(String stringValue) {
 		this.stringValue = stringValue;
+	}
+	/**
+	 * @return the atribute
+	 */
+	public AttributeDTO getAttribute() {
+		return attribute;
+	}
+	/**
+	 * @param atribute the atribute to set
+	 */
+	public void setAttribute(AttributeDTO attribute) {
+		this.attribute = attribute;
 	}
 	
 	

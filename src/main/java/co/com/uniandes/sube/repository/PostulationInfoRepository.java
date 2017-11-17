@@ -3,6 +3,7 @@ package co.com.uniandes.sube.repository;
 import org.hibernate.Session;
 
 import co.com.uniandes.sube.dto.PostulationInfoDTO;
+import co.com.uniandes.sube.utilities.entities.Attribute;
 import co.com.uniandes.sube.utilities.entities.PostulationInfo;
 
 import com.sube.utilities.hibernate.HibernateUtility;
@@ -14,9 +15,12 @@ public class PostulationInfoRepository {
 	public static PostulationInfoDTO createPostulationInfo(PostulationInfoDTO postulationInfo){
 		Session session = HibernateUtility.getSessionFactory().openSession();
 
+		// Create the attribute
+		postulationInfo.setAttribute(AttributeRepository.createAttribute(postulationInfo.getAttribute()));
+		
 		// Create the postulation info
 		PostulationInfo pI = new PostulationInfo();
-		pI.setAttributeId(postulationInfo.getAttributeId());
+		pI.setAttributeId(postulationInfo.getAttribute().getId());
 		pI.setBoolValue(postulationInfo.getBoolValue());
 		pI.setDateValue(postulationInfo.getDateValue());
 		pI.setDecimalValue(postulationInfo.getDecimalValue());
@@ -37,10 +41,13 @@ public class PostulationInfoRepository {
 	public static PostulationInfoDTO updatePostulationInfo(PostulationInfoDTO postulationInfo){
 		Session session = HibernateUtility.getSessionFactory().openSession();
 
+		// Create or update the attribute
+		postulationInfo.setAttribute(AttributeRepository.createAttribute(postulationInfo.getAttribute()));
+		
 		// Update the postulation info
 		PostulationInfo pI = new PostulationInfo();
 		pI.setId(postulationInfo.getId());
-		pI.setAttributeId(postulationInfo.getAttributeId());
+		pI.setAttributeId(postulationInfo.getAttribute().getId());
 		pI.setBoolValue(postulationInfo.getBoolValue());
 		pI.setDateValue(postulationInfo.getDateValue());
 		pI.setDecimalValue(postulationInfo.getDecimalValue());

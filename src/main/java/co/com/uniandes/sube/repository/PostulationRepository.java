@@ -7,8 +7,10 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import co.com.uniandes.sube.dto.AcademicOfferDTO;
+import co.com.uniandes.sube.dto.AttributeDTO;
 import co.com.uniandes.sube.dto.PostulationDTO;
 import co.com.uniandes.sube.dto.PostulationInfoDTO;
+import co.com.uniandes.sube.utilities.entities.OfferStep;
 import co.com.uniandes.sube.utilities.entities.Postulation;
 import co.com.uniandes.sube.utilities.entities.PostulationInfo;
 
@@ -27,6 +29,15 @@ public class PostulationRepository {
 	public static PostulationDTO createPostulation(PostulationDTO postulation){
 		Session session = HibernateUtility.getSessionFactory().openSession();
 
+		// Find the first step of postulation
+		Query qStep = session.getNamedQuery("OfferStep.findByOfferIdAndPosition");
+		qStep.setParameter("offerId", postulation.getOfferId());
+		qStep.setParameter("position", 1);
+		
+		// Results
+		OfferStep currentStep= qStep.list().isEmpty()?new OfferStep(): (OfferStep)qStep.list().get(0);
+		postulation.setCurrentStep(currentStep.getId());
+		
 		// Create the postulation
 		Postulation p = new Postulation();
 		p.setCreationDate(postulation.getCreationDate());
@@ -64,7 +75,6 @@ public class PostulationRepository {
 		System.out.println("Postulation successfully updated with id " + p.getId() + ". Academic Offer id: " + p.getOfferId());
 		
 		// Create or update Postulation Info
-		
 		List<PostulationInfoDTO> postulacionInfoDTOListTemp = new ArrayList<>();
 		
 		if(postulation.getPostulationInfoList() != null 
@@ -123,7 +133,9 @@ public class PostulationRepository {
 				PostulationInfoDTO pIDTO = new PostulationInfoDTO();
 				pIDTO.setId(pI.getId());
 				pIDTO.setPostulationId(pI.getPostulationId());
-				pIDTO.setAttributeId(pI.getAttributeId());
+				AttributeDTO a = new AttributeDTO();
+				a.setId(pI.getAttributeId());
+				pIDTO.setAttribute(a);
 				pIDTO.setBoolValue(pI.getBoolValue());
 				pIDTO.setDateValue(pI.getDateValue());
 				pIDTO.setDecimalValue(pI.getDecimalValue());
