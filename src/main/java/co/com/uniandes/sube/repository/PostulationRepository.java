@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import co.com.uniandes.sube.dto.AcademicOfferDTO;
 import co.com.uniandes.sube.dto.AttributeDTO;
 import co.com.uniandes.sube.dto.OfferStepDTO;
 import co.com.uniandes.sube.dto.PostulationDTO;
@@ -32,7 +33,7 @@ public class PostulationRepository {
 
 		// Find the first step of postulation
 		Query qStep = session.getNamedQuery("OfferStep.findByOfferIdAndPosition");
-		qStep.setParameter("offerId", postulation.getOfferId());
+		qStep.setParameter("offerId", (int)postulation.getOffer().getId());
 		qStep.setParameter("position", 1);
 		
 		// Results
@@ -45,7 +46,7 @@ public class PostulationRepository {
 		// Create the postulation
 		Postulation p = new Postulation();
 		p.setCreationDate(postulation.getCreationDate());
-		p.setOfferId(postulation.getOfferId());
+		p.setOfferId((int) postulation.getOffer().getId());
 		p.setState(postulation.getState());
 		p.setUserId(postulation.getUser().getDni());
 		p.setCurrentStep((int) postulation.getCurrentStep().getId());
@@ -55,7 +56,7 @@ public class PostulationRepository {
 		session.getTransaction().commit();
 		Integer id = (Integer)session.getIdentifier(p);
 		postulation.setId(id);
-		System.out.println("Postulation successfully created with id " + postulation.getId() + ". Academic Offer id: " + postulation.getOfferId());
+		System.out.println("Postulation successfully created with id " + postulation.getId() + ". Academic Offer id: " + postulation.getOffer().getId());
 
 
 		return postulation;
@@ -68,7 +69,7 @@ public class PostulationRepository {
 		Postulation p = new Postulation();
 		p.setId(postulation.getId());
 		p.setCreationDate(postulation.getCreationDate());
-		p.setOfferId(postulation.getOfferId());
+		p.setOfferId((int) postulation.getOffer().getId());
 		p.setState(postulation.getState());
 		p.setUserId(postulation.getUser().getDni());
 		p.setCurrentStep((int) postulation.getCurrentStep().getId());
@@ -108,9 +109,10 @@ public class PostulationRepository {
 		Session session = HibernateUtility.getSessionFactory().openSession();
 		Query qPostulation = null;
 		
-		if(postulation.getOfferId()!=0){
+		if(postulation.getOffer()!= null 
+				&&postulation.getOffer().getId()!=0){
 			qPostulation = session.getNamedQuery("Postulation.findByOfferId");
-			qPostulation.setParameter("offerId", (int)postulation.getOfferId());
+			qPostulation.setParameter("offerId", (int)postulation.getOffer().getId());
 			
 		} else if (postulation.getId() != 0){
 			qPostulation = session.getNamedQuery("Postulation.findById");
@@ -130,7 +132,12 @@ public class PostulationRepository {
 			
 			PostulationDTO pDTO = new PostulationDTO();
 			pDTO.setId(p.getId());
-			pDTO.setOfferId(p.getOfferId());
+			
+			// Set offer
+			AcademicOfferDTO aO = new AcademicOfferDTO();
+			aO.setId(p.getOfferId());
+			pDTO.setOffer(AcademicOfferRepository.getAcademicOffer(aO));
+			
 			pDTO.setState(p.getState());
 			
 			// Set user

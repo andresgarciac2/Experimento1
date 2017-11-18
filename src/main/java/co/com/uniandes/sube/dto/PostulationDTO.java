@@ -7,7 +7,7 @@ import java.util.List;
 public class PostulationDTO {
 	
 	private int id;
-	private int offerId;
+	private AcademicOfferDTO offer;
 	private Date creationDate;
 	private int state;
 	private OfferStepDTO currentStep;
@@ -26,17 +26,18 @@ public class PostulationDTO {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
 	/**
-	 * @return the offerId
+	 * @return the offer
 	 */
-	public int getOfferId() {
-		return offerId;
+	public AcademicOfferDTO getOffer() {
+		return offer;
 	}
 	/**
-	 * @param offerId the offerId to set
+	 * @param offer the offer to set
 	 */
-	public void setOfferId(int offerId) {
-		this.offerId = offerId;
+	public void setOffer(AcademicOfferDTO offer) {
+		this.offer = offer;
 	}
 	/**
 	 * @return the creationDate

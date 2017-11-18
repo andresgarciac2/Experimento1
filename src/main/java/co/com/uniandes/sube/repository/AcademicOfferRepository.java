@@ -7,12 +7,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.sube.utilities.hibernate.HibernateUtility;
 
 import co.com.uniandes.sube.dto.AcademicOfferDTO;
+import co.com.uniandes.sube.dto.OfferStepDTO;
 import co.com.uniandes.sube.utilities.entities.AcademicOffer;
+import co.com.uniandes.sube.utilities.entities.OfferStep;
 
 /**
  * Class to manage the transactions of table Academic Offer
@@ -137,5 +140,23 @@ public class AcademicOfferRepository {
 			}
 		}
 	    return offerList;
+	}
+	
+	
+	public static AcademicOfferDTO getAcademicOffer(AcademicOfferDTO offer){
+		Session session = HibernateUtility.getSessionFactory().openSession();
+		
+		Query qOffer = session.getNamedQuery("AcademicOffer.findById");
+		qOffer.setParameter("id", (int)offer.getId());
+		
+		AcademicOffer aO= qOffer.list().isEmpty()?null: (AcademicOffer)qOffer.list().get(0);
+		
+		if(aO != null){
+			// Set the offer
+			offer.setName(aO.getName());
+			offer.setCreationDate(aO.getCreationDate());
+		}
+		
+		return offer;
 	}
 }

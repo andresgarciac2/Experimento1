@@ -160,7 +160,7 @@ public class OfferStepRepository {
 		OfferStep oS= qOfferStep.list().isEmpty()?null: (OfferStep)qOfferStep.list().get(0);
 		
 		if(oS != null){
-			// Set the attribute
+			// Set the offer step
 			offerStep.setName(oS.getName());
 		}
 		

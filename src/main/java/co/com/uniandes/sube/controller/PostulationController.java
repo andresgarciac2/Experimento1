@@ -55,7 +55,9 @@ public class PostulationController implements Controller{
 			PostulationDTO req = new PostulationDTO();
 			
 			if(ctx.request().getParam("offerId") != null){
-				req.setOfferId(Integer.valueOf(ctx.request().getParam("offerId")));
+				AcademicOfferDTO offer = new AcademicOfferDTO();
+				offer.setId(Integer.valueOf(ctx.request().getParam("offerId")));
+				req.setOffer(offer);
 			}
 			
 			if(ctx.request().getParam("id") != null){
