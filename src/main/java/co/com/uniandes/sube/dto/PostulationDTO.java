@@ -7,12 +7,13 @@ import java.util.List;
 public class PostulationDTO {
 	
 	private int id;
-	private int userId;
 	private int offerId;
 	private Date creationDate;
-	private int currentStep;
 	private int state;
+	private OfferStepDTO currentStep;
+	private UserDTO user;
 	List<PostulationInfoDTO> postulationInfoList;
+	
 	/**
 	 * @return the id
 	 */
@@ -24,18 +25,6 @@ public class PostulationDTO {
 	 */
 	public void setId(int id) {
 		this.id = id;
-	}
-	/**
-	 * @return the userId
-	 */
-	public int getUserId() {
-		return userId;
-	}
-	/**
-	 * @param userId the userId to set
-	 */
-	public void setUserId(int userId) {
-		this.userId = userId;
 	}
 	/**
 	 * @return the offerId
@@ -62,18 +51,6 @@ public class PostulationDTO {
 		this.creationDate = creationDate;
 	}
 	/**
-	 * @return the currentStep
-	 */
-	public int getCurrentStep() {
-		return currentStep;
-	}
-	/**
-	 * @param currentStep the currentStep to set
-	 */
-	public void setCurrentStep(int currentStep) {
-		this.currentStep = currentStep;
-	}
-	/**
 	 * @return the state
 	 */
 	public int getState() {
@@ -96,9 +73,29 @@ public class PostulationDTO {
 	 */
 	public void setPostulationInfoList(List<PostulationInfoDTO> postulationInfoList) {
 		this.postulationInfoList = postulationInfoList;
+	}
+	/**
+	 * @return the user
+	 */
+	public UserDTO getUser() {
+		return user;
+	}
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(UserDTO user) {
+		this.user = user;
+	}
+	/**
+	 * @param currentStep the currentStep to set
+	 */
+	public void setCurrentStep(OfferStepDTO currentStep) {
+		this.currentStep = currentStep;
+	}
+	/**
+	 * @return the currentStep
+	 */
+	public OfferStepDTO getCurrentStep() {
+		return currentStep;
 	} 
-	
-	
-	
-
 }

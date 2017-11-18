@@ -3,7 +3,6 @@ package co.com.uniandes.sube.repository;
 import org.hibernate.Session;
 
 import co.com.uniandes.sube.dto.PostulationInfoDTO;
-import co.com.uniandes.sube.utilities.entities.Attribute;
 import co.com.uniandes.sube.utilities.entities.PostulationInfo;
 
 import com.sube.utilities.hibernate.HibernateUtility;

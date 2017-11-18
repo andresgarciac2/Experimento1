@@ -6,10 +6,11 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import co.com.uniandes.sube.dto.AcademicOfferDTO;
 import co.com.uniandes.sube.dto.AttributeDTO;
+import co.com.uniandes.sube.dto.OfferStepDTO;
 import co.com.uniandes.sube.dto.PostulationDTO;
 import co.com.uniandes.sube.dto.PostulationInfoDTO;
+import co.com.uniandes.sube.dto.UserDTO;
 import co.com.uniandes.sube.utilities.entities.OfferStep;
 import co.com.uniandes.sube.utilities.entities.Postulation;
 import co.com.uniandes.sube.utilities.entities.PostulationInfo;
@@ -36,15 +37,18 @@ public class PostulationRepository {
 		
 		// Results
 		OfferStep currentStep= qStep.list().isEmpty()?new OfferStep(): (OfferStep)qStep.list().get(0);
-		postulation.setCurrentStep(currentStep.getId());
+		
+		OfferStepDTO oS = new OfferStepDTO();
+		oS.setId(currentStep.getId());
+		postulation.setCurrentStep(oS);
 		
 		// Create the postulation
 		Postulation p = new Postulation();
 		p.setCreationDate(postulation.getCreationDate());
 		p.setOfferId(postulation.getOfferId());
 		p.setState(postulation.getState());
-		p.setUserId(postulation.getUserId());
-		p.setCurrentStep(postulation.getCurrentStep());
+		p.setUserId(postulation.getUser().getDni());
+		p.setCurrentStep((int) postulation.getCurrentStep().getId());
 		
 		session.beginTransaction();		
 		session.save(p);
@@ -66,8 +70,8 @@ public class PostulationRepository {
 		p.setCreationDate(postulation.getCreationDate());
 		p.setOfferId(postulation.getOfferId());
 		p.setState(postulation.getState());
-		p.setUserId(postulation.getUserId());
-		p.setCurrentStep(postulation.getCurrentStep());
+		p.setUserId(postulation.getUser().getDni());
+		p.setCurrentStep((int) postulation.getCurrentStep().getId());
 		
 		session.beginTransaction();		
 		session.merge(p);
@@ -97,13 +101,24 @@ public class PostulationRepository {
 	}
 	
 	
-	public static List<PostulationDTO> getPostulationsOffer(AcademicOfferDTO offer){
+	public static List<PostulationDTO> getPostulations(PostulationDTO postulation){
 		// Return list
 		List<PostulationDTO> postulationDTOList  = new ArrayList<>();
 		
 		Session session = HibernateUtility.getSessionFactory().openSession();
-		Query qPostulation = session.getNamedQuery("Postulation.findByOfferId");
-		qPostulation.setParameter("offerId", (int)offer.getId());
+		Query qPostulation = null;
+		
+		if(postulation.getOfferId()!=0){
+			qPostulation = session.getNamedQuery("Postulation.findByOfferId");
+			qPostulation.setParameter("offerId", (int)postulation.getOfferId());
+			
+		} else if (postulation.getId() != 0){
+			qPostulation = session.getNamedQuery("Postulation.findById");
+			qPostulation.setParameter("id", postulation.getId());
+		} else if (postulation.getUser().getDni() != 0){
+			qPostulation = session.getNamedQuery("Postulation.findByUserId");
+			qPostulation.setParameter("userId", postulation.getUser().getDni());
+		}
 		
 		// Query result list of postulations
 		List<Postulation> postulationList = qPostulation.list();
@@ -117,8 +132,17 @@ public class PostulationRepository {
 			pDTO.setId(p.getId());
 			pDTO.setOfferId(p.getOfferId());
 			pDTO.setState(p.getState());
-			pDTO.setUserId(p.getUserId());
-			pDTO.setCurrentStep(p.getCurrentStep());
+			
+			// Set user
+			UserDTO u = new UserDTO();
+			u.setDni(p.getUserId());
+			pDTO.setUser(UserRepository.getUser(u));
+			
+			// Set offer step
+			OfferStepDTO oS = new OfferStepDTO();
+			oS.setId(p.getCurrentStep());
+			pDTO.setCurrentStep(OfferStepRepository.getOfferStep(oS));
+			
 			pDTO.setCreationDate(p.getCreationDate());
 			
 			// Query to get postulation info of postulation
@@ -133,9 +157,10 @@ public class PostulationRepository {
 				PostulationInfoDTO pIDTO = new PostulationInfoDTO();
 				pIDTO.setId(pI.getId());
 				pIDTO.setPostulationId(pI.getPostulationId());
+				// Set attribute
 				AttributeDTO a = new AttributeDTO();
 				a.setId(pI.getAttributeId());
-				pIDTO.setAttribute(a);
+				pIDTO.setAttribute(AttributeRepository.getAttribute(a));
 				pIDTO.setBoolValue(pI.getBoolValue());
 				pIDTO.setDateValue(pI.getDateValue());
 				pIDTO.setDecimalValue(pI.getDecimalValue());
@@ -149,7 +174,8 @@ public class PostulationRepository {
 			
 			postulationDTOList.add(pDTO);
 		}
-		
 	    return postulationDTOList;
 	}
+	
+	
 }

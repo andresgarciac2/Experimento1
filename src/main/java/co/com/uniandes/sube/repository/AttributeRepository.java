@@ -5,13 +5,11 @@ import org.hibernate.Session;
 
 import co.com.uniandes.sube.dto.AttributeDTO;
 import co.com.uniandes.sube.utilities.entities.Attribute;
-import co.com.uniandes.sube.utilities.entities.OfferStep;
 
 import com.sube.utilities.hibernate.HibernateUtility;
 
 public class AttributeRepository {
 
-	static JDBCConnection conn = JDBCConnection.getDb();
 	
 	public static AttributeDTO createAttribute(AttributeDTO attribute){
 		Session session = HibernateUtility.getSessionFactory().openSession();
@@ -39,10 +37,6 @@ public class AttributeRepository {
 			attribute.setId(at.getId());
 			System.out.println("Attribute already existed with id " + at.getId());
 		}
-		
-
-		
-
 		return attribute;
 	}
 	
@@ -58,7 +52,24 @@ public class AttributeRepository {
 		session.merge(a);
 		session.getTransaction().commit();
 		System.out.println("Attribute successfully updated with id " + attribute.getId());
+	}
 	
+	
+	public static AttributeDTO getAttribute(AttributeDTO attribute){
+		Session session = HibernateUtility.getSessionFactory().openSession();
+		
+		Query qAttribute = session.getNamedQuery("Attribute.findById");
+		qAttribute.setParameter("id", attribute.getId());
+		
+		Attribute at= qAttribute.list().isEmpty()?null: (Attribute)qAttribute.list().get(0);
+		
+		if(at != null){
+			// Set the attribute
+			attribute.setName(at.getName());
+			attribute.setType(at.getType());
+		}
+		
+		return attribute;
 	}
 	
 }

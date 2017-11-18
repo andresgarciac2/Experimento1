@@ -3,6 +3,7 @@ package co.com.uniandes.sube.controller;
 import io.vertx.rxjava.ext.web.RoutingContext;
 import co.com.uniandes.sube.dto.AcademicOfferDTO;
 import co.com.uniandes.sube.dto.PostulationDTO;
+import co.com.uniandes.sube.dto.UserDTO;
 import co.com.uniandes.sube.repository.PostulationRepository;
 import co.com.uniandes.sube.security.Session;
 
@@ -51,13 +52,23 @@ public class PostulationController implements Controller{
 	public void getPostulationsOffer(RoutingContext ctx) {
 		Session session = Session.getSession();
 		//if (session.verificarToken(ctx)) {
-			AcademicOfferDTO req = new AcademicOfferDTO();
-
+			PostulationDTO req = new PostulationDTO();
+			
 			if(ctx.request().getParam("offerId") != null){
-				req.setId((Integer.valueOf(ctx.request().getParam("offerId"))));
+				req.setOfferId(Integer.valueOf(ctx.request().getParam("offerId")));
 			}
 			
-			respondWithJson(ctx, 200, PostulationRepository.getPostulationsOffer(req));
+			if(ctx.request().getParam("id") != null){
+				req.setId((Integer.valueOf(ctx.request().getParam("id"))));
+			}
+			
+			if(ctx.request().getParam("userId") != null){
+				UserDTO user = new UserDTO();
+				user.setDni((Integer.valueOf(ctx.request().getParam("userId"))));
+				req.setUser(user);
+			}
+			
+			respondWithJson(ctx, 200, PostulationRepository.getPostulations(req));
 		//}  else {
 		//	String stateMessage = "Invalid or null token";
 		//	respondWithJson(ctx, 403, stateMessage);

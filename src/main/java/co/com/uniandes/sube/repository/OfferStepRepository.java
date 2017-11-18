@@ -6,11 +6,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.sube.utilities.hibernate.HibernateUtility;
 
 import co.com.uniandes.sube.dto.AcademicOfferDTO;
+import co.com.uniandes.sube.dto.AttributeDTO;
 import co.com.uniandes.sube.dto.OfferStepConfigurationDTO;
 import co.com.uniandes.sube.dto.OfferStepDTO;
 import co.com.uniandes.sube.utilities.entities.AcademicOffer;
@@ -146,5 +148,22 @@ public class OfferStepRepository {
 			}
 		}
 	    return offerStepList;
+	}
+	
+	
+	public static OfferStepDTO getOfferStep(OfferStepDTO offerStep){
+		Session session = HibernateUtility.getSessionFactory().openSession();
+		
+		Query qOfferStep = session.getNamedQuery("OfferStep.findById");
+		qOfferStep.setParameter("id", (int)offerStep.getId());
+		
+		OfferStep oS= qOfferStep.list().isEmpty()?null: (OfferStep)qOfferStep.list().get(0);
+		
+		if(oS != null){
+			// Set the attribute
+			offerStep.setName(oS.getName());
+		}
+		
+		return offerStep;
 	}
 }
