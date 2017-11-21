@@ -76,6 +76,7 @@ public class VertxServer extends AbstractVerticle {
 		router.route(HttpMethod.POST, "/postulation").handler(postulationController::createPostulation);
 		router.route(HttpMethod.PUT, "/postulation").handler(postulationController::updatePostulation);
 		router.route(HttpMethod.GET, "/postulation").handler(postulationController::getPostulationsOffer);
+		router.route(HttpMethod.PUT, "/postulation/transition").handler(postulationController::evaluatePostulation);
 	}
 	
 }

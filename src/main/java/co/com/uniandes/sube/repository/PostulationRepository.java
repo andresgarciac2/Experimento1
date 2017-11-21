@@ -12,7 +12,9 @@ import co.com.uniandes.sube.dto.OfferStepDTO;
 import co.com.uniandes.sube.dto.PostulationDTO;
 import co.com.uniandes.sube.dto.PostulationInfoDTO;
 import co.com.uniandes.sube.dto.UserDTO;
+import co.com.uniandes.sube.utilities.entities.Attribute;
 import co.com.uniandes.sube.utilities.entities.OfferStep;
+import co.com.uniandes.sube.utilities.entities.OfferTransition;
 import co.com.uniandes.sube.utilities.entities.Postulation;
 import co.com.uniandes.sube.utilities.entities.PostulationInfo;
 
@@ -99,6 +101,10 @@ public class PostulationRepository {
 			postulation.setPostulationInfoList(postulacionInfoDTOListTemp);
 		}
 		
+		// Evaluate to decided the current step  <<State Machine>>
+		evaluatePostulation(postulation);
+		
+		
 	}
 	
 	
@@ -182,6 +188,45 @@ public class PostulationRepository {
 			postulationDTOList.add(pDTO);
 		}
 	    return postulationDTOList;
+	}
+	
+	
+	
+	public static PostulationDTO evaluatePostulation(PostulationDTO postulation){
+		Session session = HibernateUtility.getSessionFactory().openSession();
+		
+		// Query to get the transition
+		Query qTransition = session.getNamedQuery("OfferTransition.findBySourceStep");
+		qTransition.setParameter("offerId", (int)postulation.getOffer().getId());
+		qTransition.setParameter("sourceStep", (int)postulation.getCurrentStep().getId());
+		
+		OfferTransition oT= qTransition.list().isEmpty()?null: (OfferTransition)qTransition.list().get(0);
+		
+		if(oT != null){
+			// Query to get the postulation
+			Query qPostulation = session.getNamedQuery("Postulation.findById");
+			qPostulation.setParameter("id", (int)postulation.getId());
+			
+			Postulation p= qPostulation.list().isEmpty()?null: (Postulation)qPostulation.list().get(0);
+			
+			if(p != null){
+				p.setCurrentStep(oT.getTargetStep());
+				postulation.getCurrentStep().setId(oT.getTargetStep());
+				postulation.getCurrentStep().setOfferId(p.getOfferId());
+				
+				// Update the postulation
+				session.beginTransaction();		
+				session.merge(p);
+				session.getTransaction().commit();
+				System.out.println("Current step successfully updated of Postulation with id " + p.getId());
+				return postulation;
+			} else {
+				System.out.println("Can´t find the postulation with id " + postulation.getId());
+				return null;
+			}		
+		} 
+		return null;
+		
 	}
 	
 	

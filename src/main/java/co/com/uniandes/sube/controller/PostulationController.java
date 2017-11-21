@@ -76,4 +76,29 @@ public class PostulationController implements Controller{
 		//	respondWithJson(ctx, 403, stateMessage);
 		//}
 	}
+	
+	
+	/**
+	 * Method to evaluate the postulation and set the current step of offer
+	 * @param ctx Request context
+	 */
+	public void evaluatePostulation(RoutingContext ctx) {
+		Session session = Session.getSession();
+		//if (session.verificarToken(ctx)) {
+			PostulationDTO req = extractBodyAsJson(ctx, PostulationDTO.class);
+			
+			if(PostulationRepository.evaluatePostulation(req) != null){
+				respondWithJson(ctx, 200, req);
+			} else {
+				respondWithJson(ctx, 500, "Error to evaluate step of postulation");
+				//}
+			}
+			
+			
+		//}  else {
+		//	String stateMessage = "Invalid or null token";
+		//	respondWithJson(ctx, 403, stateMessage);
+		//}
+	}
+	
 }
