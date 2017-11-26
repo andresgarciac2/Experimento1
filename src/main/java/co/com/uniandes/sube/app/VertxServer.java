@@ -38,7 +38,7 @@ public class VertxServer extends AbstractVerticle {
         setRoutes(servicesRouter);
 		HttpServer server = vertx.createHttpServer();
         server.requestStream().toObservable().subscribe(servicesRouter::accept);
-        server.listen(8081, "0.0.0.0", bindingResult -> {
+        server.listen(8082, "0.0.0.0", bindingResult -> {
             if (bindingResult.succeeded()) {
             	HibernateUtility.getSessionFactory().openSession();
             	System.out.println("Success");
